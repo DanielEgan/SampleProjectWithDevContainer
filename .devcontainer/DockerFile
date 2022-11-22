@@ -1,0 +1,18 @@
+# Adding platform so it works on a Mac with M1 Chip - https://stackoverflow.com/questions/65612411/forcing-docker-to-use-linux-amd64-platform-by-default-on-macos
+FROM --platform=linux/amd64 python:3.7-stretch
+#FROM python:3.7-stretch
+ 
+RUN apt-get update \
+    && apt-get -y install --no-install-recommends apt-utils 2>&1
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+# Install git, process tools, lsb-release (common in install instructions for CLIs)
+RUN apt-get -y install git
+
+# Install Databricks CLI
+RUN pip install databricks-cli
+ 
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
